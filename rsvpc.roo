@@ -1,0 +1,12 @@
+project --topLevelPackage com.deepumohan.events.rsvpc --projectName rsvpc --java 6 --packaging WAR
+
+jpa setup --database HYPERSONIC_IN_MEMORY --provider HIBERNATE
+
+entity jpa --class ~.domain.Event --testAutomatically 
+field string --fieldName name
+field string --fieldName description
+
+entity jpa --class ~.domain.Student --testAutomatically 
+field string --fieldName name
+field set --fieldName events --type ~.domain.Event
+
