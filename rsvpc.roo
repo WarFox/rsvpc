@@ -10,3 +10,15 @@ entity jpa --class ~.domain.Student --testAutomatically
 field string --fieldName name
 field set --fieldName events --type ~.domain.Event
 
+repository jpa --interface ~.repository.EventRepository --entity ~.domain.Event
+repository jpa --interface ~.repository.StudentRepository --entity ~.domain.Student
+
+service --interface ~.service.EventService --entity ~.domain.Event
+service --interface ~.service.StudentService --entity ~.domain.Student
+
+web mvc setup
+web mvc json all
+web mvc scaffold --class ~.web.EventController --backingType ~.domain.Event --path admin/Events
+web mvc scaffold --class ~.web.StudentController --backingType ~.domain.Student --path admin/Student
+
+perform test

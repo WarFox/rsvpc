@@ -5,6 +5,8 @@ package com.deepumohan.events.rsvpc.domain;
 
 import com.deepumohan.events.rsvpc.domain.Event;
 import com.deepumohan.events.rsvpc.domain.EventDataOnDemand;
+import com.deepumohan.events.rsvpc.repository.EventRepository;
+import com.deepumohan.events.rsvpc.service.EventService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 privileged aspect EventDataOnDemand_Roo_DataOnDemand {
@@ -21,6 +24,12 @@ privileged aspect EventDataOnDemand_Roo_DataOnDemand {
     private Random EventDataOnDemand.rnd = new SecureRandom();
     
     private List<Event> EventDataOnDemand.data;
+    
+    @Autowired
+    EventService EventDataOnDemand.eventService;
+    
+    @Autowired
+    EventRepository EventDataOnDemand.eventRepository;
     
     public Event EventDataOnDemand.getNewTransientEvent(int index) {
         Event obj = new Event();
@@ -49,14 +58,14 @@ privileged aspect EventDataOnDemand_Roo_DataOnDemand {
         }
         Event obj = data.get(index);
         Long id = obj.getId();
-        return Event.findEvent(id);
+        return eventService.findEvent(id);
     }
     
     public Event EventDataOnDemand.getRandomEvent() {
         init();
         Event obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return Event.findEvent(id);
+        return eventService.findEvent(id);
     }
     
     public boolean EventDataOnDemand.modifyEvent(Event obj) {
@@ -66,7 +75,7 @@ privileged aspect EventDataOnDemand_Roo_DataOnDemand {
     public void EventDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = Event.findEventEntries(from, to);
+        data = eventService.findEventEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'Event' illegally returned null");
         }
@@ -78,7 +87,7 @@ privileged aspect EventDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             Event obj = getNewTransientEvent(i);
             try {
-                obj.persist();
+                eventService.saveEvent(obj);
             } catch (ConstraintViolationException e) {
                 StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
@@ -87,7 +96,7 @@ privileged aspect EventDataOnDemand_Roo_DataOnDemand {
                 }
                 throw new RuntimeException(msg.toString(), e);
             }
-            obj.flush();
+            eventRepository.flush();
             data.add(obj);
         }
     }
