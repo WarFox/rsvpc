@@ -73,9 +73,20 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     
+    <servlet>
+        <servlet-name>barbecue</servlet-name>
+        <servlet-class>net.sourceforge.barbecue.BarcodeServlet</servlet-class>            
+    </servlet>
+        
     <servlet-mapping>
         <servlet-name>rsvpc</servlet-name>
         <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!-- http://localhost:8080/rsvpc/barbecue?data=12345&type=UCC128&drawText=true&headless=true&appid=420&height=60 -->
+    <servlet-mapping>
+        <servlet-name>barbecue</servlet-name>
+        <url-pattern>/barbecue</url-pattern>
     </servlet-mapping>
     
     <session-config>
