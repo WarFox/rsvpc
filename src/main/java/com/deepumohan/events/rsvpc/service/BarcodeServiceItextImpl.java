@@ -40,13 +40,44 @@ import com.itextpdf.text.pdf.PdfWriter;
 @Service
 public class BarcodeServiceItextImpl implements BarcodeService {
 
+	@Override
+	public java.awt.Image getBarcodeImage(String barcodeText) throws IOException {
+		Barcode39 code39ext = new Barcode39();
+		code39ext.setCode(barcodeText);
+		code39ext.setStartStopText(false);
+		code39ext.setExtended(true);
+		java.awt.Image rawImage = code39ext.createAwtImage(Color.BLACK, Color.WHITE);
+		
+		int width = rawImage.getWidth(null) + 10;
+		int height = rawImage.getHeight(null) + 10 + 20;
+		
+		BufferedImage outImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2d = outImage.createGraphics();
+		g2d.setColor(Color.WHITE);
+		g2d.fillRect(0, 0, width, height);
+		g2d.drawImage(rawImage, 5, 5, null);
+		
+		Rectangle2D textBounds = g2d.getFontMetrics().getStringBounds(barcodeText, outImage.getGraphics());
+		int textX = (width - (int)textBounds.getWidth()) / 2;
+		g2d.setColor(Color.BLACK);
+		g2d.drawString(barcodeText, textX, height - 20 + 10);
+		
+		/*
+		ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
+		ImageIO.write(outImage, "png", bytesOut);
+		bytesOut.flush();
+		byte[] pngImageData = bytesOut.toByteArray();
+		*/
+		
+		return outImage;		
+	}
+		
 	/**
      * Creates a PDF document.
      * @param filename the path to the new PDF document
      * @throws    DocumentException 
      * @throws    IOException
-     */
-	@Override
+     */	
     public void createPdf(String filename) throws IOException, DocumentException {
         // step 1
         Document document = new Document(new Rectangle(340, 842));
@@ -223,39 +254,5 @@ public class BarcodeServiceItextImpl implements BarcodeService {
         // step 5
         document.close();
     }
-
-	@Override
-	public java.awt.Image getBarcodeImage(String barcodeText) throws IOException {
-		Barcode39 code39ext = new Barcode39();
-		code39ext.setCode(barcodeText);
-		code39ext.setStartStopText(false);
-		code39ext.setExtended(true);
-		java.awt.Image rawImage = code39ext.createAwtImage(Color.BLACK, Color.WHITE);
-		
-		int width = rawImage.getWidth(null) + 10;
-		int height = rawImage.getHeight(null) + 10 + 20;
-		
-		BufferedImage outImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-		Graphics2D g2d = outImage.createGraphics();
-		g2d.setColor(Color.WHITE);
-		g2d.fillRect(0, 0, width, height);
-		g2d.drawImage(rawImage, 5, 5, null);
-		
-		Rectangle2D textBounds = g2d.getFontMetrics().getStringBounds(barcodeText, outImage.getGraphics());
-		int textX = (width - (int)textBounds.getWidth()) / 2;
-		g2d.setColor(Color.BLACK);
-		g2d.drawString(barcodeText, textX, height - 20 + 10);
-		
-		/*
-		ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
-		ImageIO.write(outImage, "png", bytesOut);
-		bytesOut.flush();
-		byte[] pngImageData = bytesOut.toByteArray();
-		*/
-		
-		return outImage;
-
-		
-	}
 
 }
