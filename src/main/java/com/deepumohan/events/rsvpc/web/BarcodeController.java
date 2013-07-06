@@ -28,6 +28,6 @@ public class BarcodeController {
 	public void getBarcodeImage(@PathVariable String text, HttpServletResponse response) throws IOException {
 		OutputStream output = response.getOutputStream();
 		Image image = barcodeService.getBarcodeImage(text);
-		ImageIO.write((RenderedImage) image, "png", output);
+		ImageIO.write((RenderedImage) image, "png", output);		
 	}
 }
