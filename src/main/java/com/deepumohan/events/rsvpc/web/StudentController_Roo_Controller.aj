@@ -32,24 +32,24 @@ privileged aspect StudentController_Roo_Controller {
     public String StudentController.create(@Valid Student student, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, student);
-            return "admin/Student/create";
+            return "admin/students/create";
         }
         uiModel.asMap().clear();
         studentService.saveStudent(student);
-        return "redirect:/admin/Student/" + encodeUrlPathSegment(student.getId().toString(), httpServletRequest);
+        return "redirect:/admin/students/" + encodeUrlPathSegment(student.getId().toString(), httpServletRequest);
     }
     
     @RequestMapping(params = "form", produces = "text/html")
     public String StudentController.createForm(Model uiModel) {
         populateEditForm(uiModel, new Student());
-        return "admin/Student/create";
+        return "admin/students/create";
     }
     
     @RequestMapping(value = "/{id}", produces = "text/html")
     public String StudentController.show(@PathVariable("id") Long id, Model uiModel) {
         uiModel.addAttribute("student", studentService.findStudent(id));
         uiModel.addAttribute("itemId", id);
-        return "admin/Student/show";
+        return "admin/students/show";
     }
     
     @RequestMapping(produces = "text/html")
@@ -63,24 +63,24 @@ privileged aspect StudentController_Roo_Controller {
         } else {
             uiModel.addAttribute("students", studentService.findAllStudents());
         }
-        return "admin/Student/list";
+        return "admin/students/list";
     }
     
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String StudentController.update(@Valid Student student, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, student);
-            return "admin/Student/update";
+            return "admin/students/update";
         }
         uiModel.asMap().clear();
         studentService.updateStudent(student);
-        return "redirect:/admin/Student/" + encodeUrlPathSegment(student.getId().toString(), httpServletRequest);
+        return "redirect:/admin/students/" + encodeUrlPathSegment(student.getId().toString(), httpServletRequest);
     }
     
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String StudentController.updateForm(@PathVariable("id") Long id, Model uiModel) {
         populateEditForm(uiModel, studentService.findStudent(id));
-        return "admin/Student/update";
+        return "admin/students/update";
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
@@ -90,7 +90,7 @@ privileged aspect StudentController_Roo_Controller {
         uiModel.asMap().clear();
         uiModel.addAttribute("page", (page == null) ? "1" : page.toString());
         uiModel.addAttribute("size", (size == null) ? "10" : size.toString());
-        return "redirect:/admin/Student";
+        return "redirect:/admin/students";
     }
     
     void StudentController.populateEditForm(Model uiModel, Student student) {
