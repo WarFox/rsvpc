@@ -5,6 +5,15 @@
     <page:show id="ps_com_deepumohan_events_rsvpc_domain_Student" object="${student}" path="/admin/students" z="user-managed">
         <field:display field="name" id="s_com_deepumohan_events_rsvpc_domain_Student_name" object="${student}" z="571o75qIprEIUmBn6sN3CHR0GOw="/>
         <field:display field="events" id="s_com_deepumohan_events_rsvpc_domain_Student_events" object="${student}" z="KWuSIiX7CB8MsIciGAezfU6fmBA="/>
-        <field:display field="extraPersons" id="s_com_deepumohan_events_rsvpc_domain_Student_extraPersons" object="${student}" z="a28EwVksgvIFrRirueZOm+6K42E="/>        
+        <field:display field="extraPersons" id="s_com_deepumohan_events_rsvpc_domain_Student_extraPersons" object="${student}" z="a28EwVksgvIFrRirueZOm+6K42E="/>
+        <div class="well">
+	        <label for="barcode"><spring:message code="label_com_deepumohan_events_rsvpc_domain_student_barcode" /></label>
+	        <spring:url value="/barbecue" var="barcode_url" >            
+	            <spring:param name="data">${student.name}_${student.id}_${student.extraPersons}</spring:param>
+	            <spring:param name="type">Code128</spring:param>
+	            <spring:param name="height">60</spring:param>
+	        </spring:url>            
+	        <img src="${barcode_url}" id="barcode" />
+        </div>                
     </page:show>
 </div>
