@@ -25,4 +25,12 @@ privileged aspect Student_Roo_JavaBean {
         this.events = events;
     }
     
+    public Integer Student.getExtraPersons() {
+        return this.extraPersons;
+    }
+    
+    public void Student.setExtraPersons(Integer extraPersons) {
+        this.extraPersons = extraPersons;
+    }
+    
 }

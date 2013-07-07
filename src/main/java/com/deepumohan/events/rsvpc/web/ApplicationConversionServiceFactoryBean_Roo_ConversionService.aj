@@ -50,7 +50,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Student, String> ApplicationConversionServiceFactoryBean.getStudentToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.deepumohan.events.rsvpc.domain.Student, java.lang.String>() {
             public String convert(Student student) {
-                return new StringBuilder().append(student.getName()).toString();
+                return new StringBuilder().append(student.getName()).append(" ").append(student.getExtraPersons()).toString();
             }
         };
     }

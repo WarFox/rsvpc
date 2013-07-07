@@ -33,8 +33,14 @@ privileged aspect StudentDataOnDemand_Roo_DataOnDemand {
     
     public Student StudentDataOnDemand.getNewTransientStudent(int index) {
         Student obj = new Student();
+        setExtraPersons(obj, index);
         setName(obj, index);
         return obj;
+    }
+    
+    public void StudentDataOnDemand.setExtraPersons(Student obj, int index) {
+        Integer extraPersons = new Integer(index);
+        obj.setExtraPersons(extraPersons);
     }
     
     public void StudentDataOnDemand.setName(Student obj, int index) {
